@@ -4,7 +4,7 @@
 This project analyzes a real-world used car marketplace dataset to generate actionable pricing insights.  
 The goal is to transform messy, inconsistent data into a reliable decision-making tool for buyers, sellers, and dealers.
 
-The dataset reflects real marketplace conditions — noisy, unstructured, and filled with anomalies — making it ideal for practical data science application.
+The dataset reflects real marketplace conditions,noisy, unstructured, and filled with anomalies, making it ideal for practical data science application.
 
 ---
 

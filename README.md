@@ -1,6 +1,6 @@
-# 🚗 Used Car Market Intelligence & Pricing Insights
+#  Used Car Market Intelligence & Pricing Insights
 
-## 📌 Project Overview
+##  Project Overview
 
 This project analyzes a real-world used car marketplace dataset to generate pricing intelligence and resale value insights.
 
@@ -14,7 +14,7 @@ make smarter pricing decisions.
 
 ---
 
-## 🎯 Project Objectives
+##  Project Objectives
 
 - Analyze resale prices across different brands
 - Understand how mileage affects pricing
@@ -24,7 +24,7 @@ make smarter pricing decisions.
 
 ---
 
-## 🛠️ Tech Stack
+##  Tech Stack
 
 - Python
 - Pandas
@@ -35,7 +35,7 @@ make smarter pricing decisions.
 
 ---
 
-## 📂 Project Structure
+##  Project Structure
 
 ```text
 car-pricing-intelligence/
@@ -54,7 +54,6 @@ car-pricing-intelligence/
 ### 1. Data Loading
 The dataset was loaded using `pandas`. An encoding issue occurred because the CSV file was not UTF-8 encoded.
 
-```python
 df = pd.read_csv("autos.csv", encoding="latin1")
 
 ### 2. Price Cleaning
@@ -71,6 +70,7 @@ Listings with price = 0 were removed because they likely represented missing or 
 
 ```python
 df = df[df["price"] > 0]
+```
 
 Price outliers were analyzed using percentiles:
 
@@ -85,4 +85,63 @@ Since 99.9% of listings were below approximately 100,000, prices above 100,000 w
 
 ```python
 df = df[df["price"] < 100000]
+```
+
+### 3. Vehicle Age Preparation
+
+The yearOfRegistration column was inspected to identify unrealistic years.
+
+Vehicle age was treated carefully because using the current year could distort the analysis. Since the prices represent historical listing prices, vehicle age should be calculated relative to the dataset period rather than today’s year.
+
+```python
+df["vehicleAge"] = 2018 - df["yearOfRegistration"]
+```
+### 4. Mileage Cleaning
+
+The odometer column was originally stored as text, with values such as:
+
+150,000km
+
+The column was cleaned by removing km, removing commas, and converting the values to numeric format.
+
+```python
+df["odometer"] = df["odometer"].str.replace("km", "", regex=False)
+df["odometer"] = df["odometer"].str.replace(",", "", regex=False)
+df["odometer"] = pd.to_numeric(df["odometer"])
+```
+Key observation:
+
+The most common mileage category was 150,000km
+The column had only 13 unique mileage groups, meaning mileage was bucketed
+
+## Early EDA Findings
+Average Resale Price by Brand
+| Brand         | Average Price | Listings |
+| ------------- | ------------: | -------: |
+| Porsche       |     36,057.63 |      219 |
+| Land Rover    |     20,360.77 |       83 |
+| Jaguar        |     13,194.43 |       58 |
+| Jeep          |     11,879.97 |       87 |
+| Mini          |     10,957.37 |      366 |
+| Audi          |     10,523.18 |    3,167 |
+| Mercedes-Benz |      9,411.03 |    3,553 |
+| BMW           |      9,106.06 |    4,035 |
+| Chevrolet     |      7,236.18 |      200 |
+| Skoda         |      6,891.92 |      640 |
+
+
+## 📊 Exploratory Data Analysis (EDA)
+
+### Price Distribution After Cleaning
+
+The original dataset contained:
+- invalid zero-priced listings
+- extreme outliers in the millions
+
+After cleaning:
+- the distribution became more interpretable
+- market pricing trends became clearer
+
+![Price Distribution](outputs/charts/price_distribution.png)
+
 

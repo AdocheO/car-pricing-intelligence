@@ -1,38 +1,58 @@
 # 🚗 Used Car Market Intelligence & Pricing Insights
 
 ## 📌 Project Overview
-This project analyzes a real-world used car marketplace dataset to generate actionable pricing insights.  
-The goal is to transform messy, inconsistent data into a reliable decision-making tool for buyers, sellers, and dealers.
 
-The dataset reflects real marketplace conditions,noisy, unstructured, and filled with anomalies, making it ideal for practical data science application.
+This project analyzes a real-world used car marketplace dataset to generate pricing intelligence and resale value insights.
 
----
+The objective is to transform messy marketplace data into actionable business insights that can help:
+- buyers
+- sellers
+- dealers
+- marketplace platforms
 
-## 🎯 Objectives
-- Establish pricing benchmarks across car brands
-- Analyze how mileage and vehicle age affect resale value
-- Identify brands with the best value retention
-- Detect and clean misleading or incorrect listings
-- Build a simple pricing estimator for real-world use
+make smarter pricing decisions.
 
 ---
 
-## 🧠 Key Business Questions
-- Which car brands command higher resale prices?
-- How does mileage impact price depreciation?
-- What is the relationship between vehicle age and price?
-- Which brands retain value best over time?
-- What price range should be expected for a given car?
+## 🎯 Project Objectives
+
+- Analyze resale prices across different brands
+- Understand how mileage affects pricing
+- Study depreciation trends using vehicle age
+- Identify brands with strong value retention
+- Build a simple pricing estimator
 
 ---
 
 ## 🛠️ Tech Stack
+
 - Python
 - Pandas
 - NumPy
-- Matplotlib / Seaborn
-- Jupyter Notebook (via VS Code)
+- Matplotlib
+- VS Code
+- Jupyter Notebook
 
 ---
 
 ## 📂 Project Structure
+
+```text
+car-pricing-intelligence/
+│
+├── autos.csv
+├── analysis.ipynb
+├── README.md
+└── outputs/
+```
+
+---
+
+# 📈 Progress & Findings So Far
+## ✅ Project Progress
+
+### 1. Data Loading
+The dataset was loaded using `pandas`. An encoding issue occurred because the CSV file was not UTF-8 encoded.
+
+```python
+df = pd.read_csv("autos.csv", encoding="latin1")

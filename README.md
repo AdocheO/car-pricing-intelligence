@@ -48,11 +48,41 @@ car-pricing-intelligence/
 
 ---
 
-# 📈 Progress & Findings So Far
-## ✅ Project Progress
+# Progress & Findings So Far
+## Project Progress
 
 ### 1. Data Loading
 The dataset was loaded using `pandas`. An encoding issue occurred because the CSV file was not UTF-8 encoded.
 
 ```python
 df = pd.read_csv("autos.csv", encoding="latin1")
+
+### 2. Price Cleaning
+
+Initial inspection showed that the price column contained invalid and extreme values.
+
+Key Findings
+1,421 listings had a price of 0
+Some listings had unrealistically high prices in the millions
+The original price distribution was heavily distorted by outliers
+Cleaning Decisions
+
+Listings with price = 0 were removed because they likely represented missing or invalid prices.
+
+```python
+df = df[df["price"] > 0]
+
+Price outliers were analyzed using percentiles:
+
+| Percentile |  Price |
+| ---------- | -----: |
+| 90%        | 15,999 |
+| 95%        | 22,000 |
+| 99%        | 38,456 |
+| 99.9%      | 99,370 |
+
+Since 99.9% of listings were below approximately 100,000, prices above 100,000 were treated as extreme outliers.
+
+```python
+df = df[df["price"] < 100000]
+

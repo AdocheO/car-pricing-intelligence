@@ -1,147 +1,178 @@
-#  Used Car Market Intelligence & Pricing Insights
+# 🚗 Used Car Market Intelligence & Pricing Insights
 
-##  Project Overview
+## 📌 Project Overview
 
-This project analyzes a real-world used car marketplace dataset to generate pricing intelligence and resale value insights.
+This project analyzes a real-world used-car marketplace dataset to generate pricing intelligence and understand how factors such as:
+- brand
+- mileage
+- vehicle age
 
-The objective is to transform messy marketplace data into actionable business insights that can help:
+affect resale value.
+
+The goal is to transform messy marketplace data into actionable insights for:
 - buyers
 - sellers
 - dealers
 - marketplace platforms
 
-make smarter pricing decisions.
-
 ---
 
-##  Project Objectives
+## 🎯 Business Objectives
 
-- Analyze resale prices across different brands
-- Understand how mileage affects pricing
-- Study depreciation trends using vehicle age
+- Establish pricing benchmarks across brands
+- Analyze depreciation trends
 - Identify brands with strong value retention
+- Understand mileage impact on resale pricing
 - Build a simple pricing estimator
 
 ---
 
-##  Tech Stack
+## 🛠️ Tech Stack
 
 - Python
 - Pandas
 - NumPy
 - Matplotlib
+- Seaborn
 - VS Code
 - Jupyter Notebook
 
 ---
 
-##  Project Structure
+## 📂 Project Structure
 
 ```text
 car-pricing-intelligence/
 │
-├── autos.csv
 ├── analysis.ipynb
+├── cleaned_autos.csv
+├── pricing_estimator.csv
 ├── README.md
-└── outputs/
+│
+├── outputs/
+│   └── charts/
+│
+└── reports/
 ```
 
 ---
 
-# Progress & Findings So Far
-## Project Progress
+# 🧹 Data Cleaning & Preparation
 
-### 1. Data Loading
-The dataset was loaded using `pandas`. An encoding issue occurred because the CSV file was not UTF-8 encoded.
+Key preprocessing steps included:
 
-df = pd.read_csv("autos.csv", encoding="latin1")
+- Fixed dataset encoding issues using `latin1`
+- Removed invalid zero-priced listings
+- Removed extreme price outliers above 100,000
+- Standardized column names into snake_case
+- Converted mileage values from text to numeric format
+- Created vehicle age feature
+- Filtered unrealistic vehicle ages
 
-### 2. Price Cleaning
+---
 
-Initial inspection showed that the price column contained invalid and extreme values.
+# 📊 Exploratory Data Analysis (EDA)
 
-Key Findings
-1,421 listings had a price of 0
-Some listings had unrealistically high prices in the millions
-The original price distribution was heavily distorted by outliers
-Cleaning Decisions
+## 📈 Vehicle Price Distribution
 
-Listings with price = 0 were removed because they likely represented missing or invalid prices.
+### Key Findings
+- Vehicle prices are heavily right-skewed
+- Most listings fall within the low-to-mid price range
+- Premium vehicles form a smaller high-price segment
 
-```python
-df = df[df["price"] > 0]
-```
+![Vehicle Price Distribution](outputs/charts/price_distribution.png)
 
-Price outliers were analyzed using percentiles:
+---
 
-| Percentile |  Price |
-| ---------- | -----: |
-| 90%        | 15,999 |
-| 95%        | 22,000 |
-| 99%        | 38,456 |
-| 99.9%      | 99,370 |
+## 📉 Price vs Mileage
 
-Since 99.9% of listings were below approximately 100,000, prices above 100,000 were treated as extreme outliers.
+### Key Findings
+- Higher mileage strongly correlates with lower resale prices
+- Low-mileage vehicles command premium pricing
+- Depreciation becomes more significant at higher mileage ranges
 
-```python
-df = df[df["price"] < 100000]
-```
+![Price vs Mileage](outputs/charts/price_vs_mileage.png)
 
-### 3. Vehicle Age Preparation
+---
 
-The yearOfRegistration column was inspected to identify unrealistic years.
+## 🚗 Price vs Vehicle Age
 
-Vehicle age was treated carefully because using the current year could distort the analysis. Since the prices represent historical listing prices, vehicle age should be calculated relative to the dataset period rather than today’s year.
+### Key Findings
+- Vehicle prices decrease as vehicle age increases
+- Depreciation is steepest during the early years
+- Older vehicles stabilize within lower price ranges
 
-```python
-df["vehicleAge"] = 2018 - df["yearOfRegistration"]
-```
-### 4. Mileage Cleaning
+![Price vs Vehicle Age](outputs/charts/price_vs_vehicle_age.png)
 
-The odometer column was originally stored as text, with values such as:
+---
 
-150,000km
+# 🏆 Value Retention Analysis
 
-The column was cleaned by removing km, removing commas, and converting the values to numeric format.
+### Key Findings
+- Mercedes-Benz, BMW, and Audi retained stronger resale value
+- Toyota showed smoother long-term depreciation
+- Volkswagen demonstrated stable mid-market positioning
+- Premium brand advantages reduced gradually with age
 
-```python
-df["odometer"] = df["odometer"].str.replace("km", "", regex=False)
-df["odometer"] = df["odometer"].str.replace(",", "", regex=False)
-df["odometer"] = pd.to_numeric(df["odometer"])
-```
-Key observation:
+![Vehicle Depreciation by Brand](outputs/charts/value_retention_by_brand.png)
 
-The most common mileage category was 150,000km
-The column had only 13 unique mileage groups, meaning mileage was bucketed
+---
 
-## Early EDA Findings
-Average Resale Price by Brand
-| Brand         | Average Price | Listings |
-| ------------- | ------------: | -------: |
-| Porsche       |     36,057.63 |      219 |
-| Land Rover    |     20,360.77 |       83 |
-| Jaguar        |     13,194.43 |       58 |
-| Jeep          |     11,879.97 |       87 |
-| Mini          |     10,957.37 |      366 |
-| Audi          |     10,523.18 |    3,167 |
-| Mercedes-Benz |      9,411.03 |    3,553 |
-| BMW           |      9,106.06 |    4,035 |
-| Chevrolet     |      7,236.18 |      200 |
-| Skoda         |      6,891.92 |      640 |
+# 🧮 Pricing Estimator
 
+A simple rule-based pricing estimator was developed using:
 
-## 📊 Exploratory Data Analysis (EDA)
+- Brand
+- Mileage band
+- Vehicle age band
 
-### Price Distribution After Cleaning
+The estimator returns:
+- average price
+- median price
+- estimated pricing ranges
 
-The original dataset contained:
-- invalid zero-priced listings
-- extreme outliers in the millions
+This provides an interpretable pricing intelligence tool for:
+- buyers
+- dealers
+- marketplace platforms
 
-After cleaning:
-- the distribution became more interpretable
-- market pricing trends became clearer
+---
 
-![Price Distribution](outputs/charts/price_distribution.png)
+# 📌 Key Insights
 
+- Mileage and vehicle age are major drivers of depreciation
+- Premium brands maintain higher resale value over time
+- Most used-car listings exist within the affordable-to-mid-range market
+- Data cleaning significantly improved interpretability and analysis reliability
 
+---
+
+# 🚀 Future Improvements
+
+- Machine learning price prediction model
+- Interactive dashboard
+- Market segmentation analysis
+- Underpriced vs overpriced vehicle detection
+- Deployment as a web application
+
+---
+
+# 📚 Learning Outcomes
+
+This project strengthened skills in:
+- real-world data cleaning
+- exploratory data analysis
+- business intelligence
+- statistical reasoning
+- pricing analysis
+- data storytelling
+
+---
+
+# 📬 Connect With Me
+
+I’m documenting my journey into data science and analytics through real-world projects and public learning.
+
+- GitHub
+- LinkedIn
+- X (Twitter)
